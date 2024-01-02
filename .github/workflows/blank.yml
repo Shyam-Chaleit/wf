@@ -1,0 +1,33 @@
+name: Daily Commits
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # Adjust the cron schedule to your preferred time
+
+jobs:
+  commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Set up Git user
+        run: |
+          git config --local user.email "skumar@chaleit.com"
+          git config --local user.name "Shyam-Chaleit"
+
+      - name: Make daily commit
+        run: |
+          random_string="0000000000000000010000010100010001001000100100010000000001111100001000000100000010000111110000000000011100010100010010000101000001110000000001111100000010000001000000100000010000000001111100101010010101001010100100010000000001000100100010011111001000100100010000000001000000100000011111001000000100000000000000000000000000000000000000000000000000000000000000000000"  # Your 365-character long random string
+          current_day=$(date +"%j")  # Get the current day of the year
+
+          if [ "${random_string:${current_day}-1:1}" == "1" ]; then
+            echo "Committing changes for day ${current_day}"
+            echo "Changes for day ${current_day}" >> file.txt  # Adjust this line as needed
+            git add .
+            git commit -m "Daily commit for day ${current_day}"
+            git push
+          else
+            echo "No commit for day ${current_day}"
+          fi
